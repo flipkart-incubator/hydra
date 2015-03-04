@@ -27,7 +27,10 @@ public class DefaultDispatcher implements Dispatcher {
     @Override
     public Object execute(Map<String, Object> params, Map<String, Task> tasks, Composer composer) throws DispatchFailedException, ComposerEvaluationException {
         Map<String, Object> responses = dispatchAndCollect(params, tasks);
-        return composer.compose(responses);
+        
+        List<String> dependencies = composer.getDependencies();
+        Map<String, Object> collectedDependencies = collectDependencies(responses, dependencies);
+        return composer.compose(collectedDependencies);
     }
 
     private Map<String, Object> dispatchAndCollect(Map<String, Object> params, Map<String, Task> tasks) throws DispatchFailedException, ComposerEvaluationException {
@@ -45,7 +48,7 @@ public class DefaultDispatcher implements Dispatcher {
                     List<String> dependencies = task.getDependencies();
                     Map<String, Object> collectedDependencies = collectDependencies(responses, dependencies);
                     if (collectedDependencies.size() == dependencies.size()) {
-                        Future<Object> future = dispatchTask(task, responses);
+                        Future<Object> future = dispatchTask(task, collectedDependencies);
                         dispatched.add(key);
                         futures.put(future, key);
                     }
