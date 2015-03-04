@@ -1,10 +1,10 @@
 package com.flipkart.hydra.dispatcher;
 
-import com.flipkart.hydra.task.Task;
-import com.flipkart.hydra.task.exception.BadCallableException;
 import com.flipkart.hydra.composer.Composer;
 import com.flipkart.hydra.dispatcher.exception.DispatchFailedException;
 import com.flipkart.hydra.expression.exception.ExpressionEvaluationException;
+import com.flipkart.hydra.task.Task;
+import com.flipkart.hydra.task.exception.BadCallableException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,15 +43,8 @@ public class DefaultDispatcher implements Dispatcher {
                 Task task = tasks.get(key);
                 if (!dispatched.contains(key)) {
                     List<String> dependencies = task.getDependencies();
-                    boolean dependenciesMet = true;
-                    for (String dependency : dependencies) {
-                        if (!responses.containsKey(dependency)) {
-                            dependenciesMet = false;
-                            break;
-                        }
-                    }
-
-                    if (dependenciesMet) {
+                    Map<String, Object> collectedDependencies = collectDependencies(responses, dependencies);
+                    if (collectedDependencies.size() == dependencies.size()) {
                         Future<Object> future = dispatchTask(task, responses);
                         dispatched.add(key);
                         futures.put(future, key);
@@ -69,6 +62,17 @@ public class DefaultDispatcher implements Dispatcher {
         }
 
         return responses;
+    }
+
+    private Map<String, Object> collectDependencies(Map<String, Object> responses, List<String> dependencies) {
+        Map<String, Object> collectedDependencies = new HashMap<>();
+        for (String dependency : dependencies) {
+            if (responses.containsKey(dependency)) {
+                collectedDependencies.put(dependency, responses.get(dependency));
+            }
+        }
+
+        return collectedDependencies;
     }
 
     private Future<Object> dispatchTask(Task task, Map<String, Object> responses) throws ExpressionEvaluationException, DispatchFailedException {
