@@ -1,9 +1,9 @@
 package com.flipkart.hydra.task;
 
-import com.flipkart.hydra.task.exception.BadCallableException;
-import com.flipkart.hydra.composer.DefaultComposer;
 import com.flipkart.hydra.composer.Composer;
-import com.flipkart.hydra.expression.exception.ExpressionParseException;
+import com.flipkart.hydra.composer.DefaultComposer;
+import com.flipkart.hydra.composer.exception.ComposerInstantiationException;
+import com.flipkart.hydra.task.exception.BadCallableException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -20,11 +20,11 @@ public class DefaultTask implements Task {
         this.composer = composer;
     }
 
-    public DefaultTask(Class<Callable> callableClass, Object context) throws ExpressionParseException {
+    public DefaultTask(Class<Callable> callableClass, Object context) throws ComposerInstantiationException {
         this(callableClass, context, false);
     }
 
-    public DefaultTask(Class<Callable> callableClass, Object context, boolean isAlreadyParsed) throws ExpressionParseException {
+    public DefaultTask(Class<Callable> callableClass, Object context, boolean isAlreadyParsed) throws ComposerInstantiationException {
         this.callableClass = callableClass;
         this.composer = new DefaultComposer(context, isAlreadyParsed);
     }

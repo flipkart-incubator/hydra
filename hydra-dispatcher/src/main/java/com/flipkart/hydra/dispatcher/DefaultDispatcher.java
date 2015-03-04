@@ -1,8 +1,8 @@
 package com.flipkart.hydra.dispatcher;
 
 import com.flipkart.hydra.composer.Composer;
+import com.flipkart.hydra.composer.exception.ComposerEvaluationException;
 import com.flipkart.hydra.dispatcher.exception.DispatchFailedException;
-import com.flipkart.hydra.expression.exception.ExpressionEvaluationException;
 import com.flipkart.hydra.task.Task;
 import com.flipkart.hydra.task.exception.BadCallableException;
 
@@ -25,12 +25,12 @@ public class DefaultDispatcher implements Dispatcher {
     }
 
     @Override
-    public Object execute(Map<String, Object> params, Map<String, Task> tasks, Composer composer) throws DispatchFailedException, ExpressionEvaluationException {
+    public Object execute(Map<String, Object> params, Map<String, Task> tasks, Composer composer) throws DispatchFailedException, ComposerEvaluationException {
         Map<String, Object> responses = dispatchAndCollect(params, tasks);
         return composer.compose(responses);
     }
 
-    private Map<String, Object> dispatchAndCollect(Map<String, Object> params, Map<String, Task> tasks) throws DispatchFailedException, ExpressionEvaluationException {
+    private Map<String, Object> dispatchAndCollect(Map<String, Object> params, Map<String, Task> tasks) throws DispatchFailedException, ComposerEvaluationException {
         Map<String, Object> responses = new HashMap<>();
         List<String> dispatched = new ArrayList<>();
         Map<Future<Object>, String> futures = new HashMap<>();
@@ -52,7 +52,7 @@ public class DefaultDispatcher implements Dispatcher {
                 }
             }
 
-            if(dispatched.isEmpty()) {
+            if (dispatched.isEmpty()) {
                 throw new DispatchFailedException("No possible resolution of dependencies found.");
             }
 
@@ -81,7 +81,7 @@ public class DefaultDispatcher implements Dispatcher {
         return collectedDependencies;
     }
 
-    private Future<Object> dispatchTask(Task task, Map<String, Object> responses) throws ExpressionEvaluationException, DispatchFailedException {
+    private Future<Object> dispatchTask(Task task, Map<String, Object> responses) throws DispatchFailedException, ComposerEvaluationException {
         try {
             Composer composer = task.getComposer();
             Callable<Object> callable = task.getCallable(composer.compose(responses));

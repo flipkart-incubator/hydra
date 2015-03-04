@@ -1,8 +1,8 @@
 package com.flipkart.hydra.composer;
 
+import com.flipkart.hydra.composer.exception.ComposerEvaluationException;
+import com.flipkart.hydra.composer.exception.ComposerInstantiationException;
 import com.flipkart.hydra.expression.Expression;
-import com.flipkart.hydra.expression.exception.ExpressionEvaluationException;
-import com.flipkart.hydra.expression.exception.ExpressionParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,17 +16,17 @@ public class DefaultComposer implements Composer {
     private final Object context;
     private final List<String> dependencies;
 
-    public DefaultComposer(Object context) throws ExpressionParseException {
+    public DefaultComposer(Object context) throws ComposerInstantiationException {
         this(context, false);
     }
 
-    public DefaultComposer(Object context, boolean isAlreadyParsed) throws ExpressionParseException {
+    public DefaultComposer(Object context, boolean isAlreadyParsed) throws ComposerInstantiationException {
         this.context = isAlreadyParsed ? context : parse(context);
         this.dependencies = findDependencies(this.context);
     }
 
     @Override
-    public Object compose(Map<String, Object> values) throws ExpressionEvaluationException {
+    public Object compose(Map<String, Object> values) throws ComposerEvaluationException {
         return evaluate(context, values);
     }
 
