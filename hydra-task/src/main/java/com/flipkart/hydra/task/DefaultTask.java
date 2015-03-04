@@ -12,19 +12,19 @@ import java.util.concurrent.Callable;
 
 public class DefaultTask implements Task {
 
-    private final Class<Callable> callableClass;
+    private final Class<? extends Callable> callableClass;
     private final Composer composer;
 
-    public DefaultTask(Class<Callable> callableClass, Composer composer) {
+    public DefaultTask(Class<? extends Callable> callableClass, Composer composer) {
         this.callableClass = callableClass;
         this.composer = composer;
     }
 
-    public DefaultTask(Class<Callable> callableClass, Object context) throws ComposerInstantiationException {
+    public DefaultTask(Class<? extends Callable> callableClass, Object context) throws ComposerInstantiationException {
         this(callableClass, context, false);
     }
 
-    public DefaultTask(Class<Callable> callableClass, Object context, boolean isAlreadyParsed) throws ComposerInstantiationException {
+    public DefaultTask(Class<? extends Callable> callableClass, Object context, boolean isAlreadyParsed) throws ComposerInstantiationException {
         this.callableClass = callableClass;
         this.composer = new DefaultComposer(context, isAlreadyParsed);
     }
@@ -37,11 +37,23 @@ public class DefaultTask implements Task {
     @Override
     public Callable<Object> getCallable(Object values) throws BadCallableException {
         try {
-            Constructor<Callable> constructor = callableClass.getConstructor(Object.class);
+            Constructor<? extends Callable> constructor = getFirstSingleArgConstructor();
             return (Callable<Object>) constructor.newInstance(values);
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new BadCallableException("Unable to execute callable", e);
         }
+    }
+
+    private Constructor<? extends Callable> getFirstSingleArgConstructor() throws NoSuchMethodException {
+        Constructor<?>[] declaredConstructors = callableClass.getDeclaredConstructors();
+        for (Constructor constructor : declaredConstructors) {
+            Class[] parameterTypes = constructor.getParameterTypes();
+            if (parameterTypes.length == 1) {
+                return constructor;
+            }
+        }
+
+        throw new NoSuchMethodException("Unable to find a single argument constructor.");
     }
 
     @Override
