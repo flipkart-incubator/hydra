@@ -41,7 +41,7 @@ public class DefaultDispatcher implements Dispatcher {
         while (remaining > 0) {
             for (String key : tasks.keySet()) {
                 Task task = tasks.get(key);
-                if (!dispatched.contains(key)) {
+                if (!responses.containsKey(key) && !dispatched.contains(key)) {
                     List<String> dependencies = task.getDependencies();
                     Map<String, Object> collectedDependencies = collectDependencies(responses, dependencies);
                     if (collectedDependencies.size() == dependencies.size()) {
@@ -52,9 +52,15 @@ public class DefaultDispatcher implements Dispatcher {
                 }
             }
 
+            if(dispatched.isEmpty()) {
+                throw new DispatchFailedException("No possible resolution of dependencies found.");
+            }
+
             try {
                 Future future = completionService.take();
-                responses.put(futures.get(future), future.get());
+                String key = futures.get(future);
+                responses.put(key, future.get());
+                dispatched.remove(key);
                 remaining--;
             } catch (InterruptedException | ExecutionException e) {
                 throw new DispatchFailedException("Unable to fetch all required data", e);
