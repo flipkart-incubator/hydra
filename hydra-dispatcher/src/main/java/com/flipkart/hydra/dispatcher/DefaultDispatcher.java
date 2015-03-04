@@ -1,7 +1,9 @@
 package com.flipkart.hydra.dispatcher;
 
 import com.flipkart.hydra.composer.Composer;
+import com.flipkart.hydra.composer.DefaultComposer;
 import com.flipkart.hydra.composer.exception.ComposerEvaluationException;
+import com.flipkart.hydra.composer.exception.ComposerInstantiationException;
 import com.flipkart.hydra.dispatcher.exception.DispatchFailedException;
 import com.flipkart.hydra.task.Task;
 import com.flipkart.hydra.task.exception.BadCallableException;
@@ -25,9 +27,24 @@ public class DefaultDispatcher implements Dispatcher {
     }
 
     @Override
+    public Object execute(Map<String, Object> params, Map<String, Task> tasks, Object context) throws DispatchFailedException, ComposerEvaluationException {
+        return execute(params, tasks, context, false);
+    }
+
+    @Override
+    public Object execute(Map<String, Object> params, Map<String, Task> tasks, Object context, boolean isAlreadyParsed) throws DispatchFailedException, ComposerEvaluationException {
+        try {
+            DefaultComposer defaultComposer = new DefaultComposer(context, isAlreadyParsed);
+            return execute(params, tasks, defaultComposer);
+        } catch (ComposerInstantiationException e) {
+            throw new DispatchFailedException("Unable to create composer.", e);
+        }
+    }
+
+    @Override
     public Object execute(Map<String, Object> params, Map<String, Task> tasks, Composer composer) throws DispatchFailedException, ComposerEvaluationException {
         Map<String, Object> responses = dispatchAndCollect(params, tasks);
-        
+
         List<String> dependencies = composer.getDependencies();
         Map<String, Object> collectedDependencies = collectDependencies(responses, dependencies);
         return composer.compose(collectedDependencies);
