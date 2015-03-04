@@ -1,4 +1,4 @@
-package com.flipkart.hydra.expression;
+package com.flipkart.hydra.expression.utils;
 
 import com.flipkart.hydra.expression.exception.ExpressionParseException;
 
