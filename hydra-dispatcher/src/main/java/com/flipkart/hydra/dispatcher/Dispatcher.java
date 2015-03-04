@@ -1,7 +1,7 @@
 package com.flipkart.hydra.dispatcher;
 
-import com.flipkart.hydra.call.ICall;
-import com.flipkart.hydra.call.exception.BadCallableException;
+import com.flipkart.hydra.task.Task;
+import com.flipkart.hydra.task.exception.BadCallableException;
 import com.flipkart.hydra.composer.IComposer;
 import com.flipkart.hydra.dispatcher.exception.DispatchFailedException;
 import com.flipkart.hydra.expression.exception.ExpressionEvaluationException;
@@ -25,24 +25,24 @@ public class Dispatcher implements IDispatcher {
     }
 
     @Override
-    public Object execute(Map<String, Object> params, Map<String, ICall> calls, IComposer composer) throws DispatchFailedException, ExpressionEvaluationException {
-        Map<String, Object> responses = dispatchAndCollect(params, calls);
+    public Object execute(Map<String, Object> params, Map<String, Task> tasks, IComposer composer) throws DispatchFailedException, ExpressionEvaluationException {
+        Map<String, Object> responses = dispatchAndCollect(params, tasks);
         return composer.compose(responses);
     }
 
-    private Map<String, Object> dispatchAndCollect(Map<String, Object> params, Map<String, ICall> calls) throws DispatchFailedException, ExpressionEvaluationException {
+    private Map<String, Object> dispatchAndCollect(Map<String, Object> params, Map<String, Task> tasks) throws DispatchFailedException, ExpressionEvaluationException {
         Map<String, Object> responses = new HashMap<>();
         List<String> dispatched = new ArrayList<>();
         Map<Future<Object>, String> futures = new HashMap<>();
 
         responses.putAll(params);
 
-        int remaining = calls.size();
+        int remaining = tasks.size();
         while (remaining > 0) {
-            for (String key : calls.keySet()) {
-                ICall call = calls.get(key);
+            for (String key : tasks.keySet()) {
+                Task task = tasks.get(key);
                 if (!dispatched.contains(key)) {
-                    List<String> dependencies = call.getDependencies();
+                    List<String> dependencies = task.getDependencies();
                     boolean dependenciesMet = true;
                     for (String dependency : dependencies) {
                         if (!responses.containsKey(dependency)) {
@@ -52,7 +52,7 @@ public class Dispatcher implements IDispatcher {
                     }
 
                     if (dependenciesMet) {
-                        Future<Object> future = makeCall(call, responses);
+                        Future<Object> future = dispatchTask(task, responses);
                         dispatched.add(key);
                         futures.put(future, key);
                     }
@@ -71,13 +71,13 @@ public class Dispatcher implements IDispatcher {
         return responses;
     }
 
-    private Future<Object> makeCall(ICall call, Map<String, Object> responses) throws ExpressionEvaluationException, DispatchFailedException {
+    private Future<Object> dispatchTask(Task task, Map<String, Object> responses) throws ExpressionEvaluationException, DispatchFailedException {
         try {
-            IComposer composer = call.getComposer();
-            Callable<Object> callable = call.getCallable(composer.compose(responses));
+            IComposer composer = task.getComposer();
+            Callable<Object> callable = task.getCallable(composer.compose(responses));
             return completionService.submit(callable);
         } catch (BadCallableException e) {
-            throw new DispatchFailedException("Failed to make call", e);
+            throw new DispatchFailedException("Failed to dispatch task", e);
         }
     }
 }

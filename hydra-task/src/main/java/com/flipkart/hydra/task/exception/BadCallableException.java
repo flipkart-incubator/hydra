@@ -1,4 +1,4 @@
-package com.flipkart.hydra.call.exception;
+package com.flipkart.hydra.task.exception;
 
 public class BadCallableException extends Exception {
 

@@ -14,7 +14,7 @@
         <module>hydra-dispatcher</module>
         <module>hydra-composer</module>
         <module>hydra-expression</module>
-        <module>hydra-call</module>
+        <module>hydra-task</module>
     </modules>
 
     <build>
@@ -50,7 +50,7 @@
             </dependency>
             <dependency>
                 <groupId>com.flipkart.hydra</groupId>
-                <artifactId>hydra-call</artifactId>
+                <artifactId>hydra-task</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

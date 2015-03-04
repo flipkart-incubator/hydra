@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>com.flipkart.hydra</groupId>
-            <artifactId>hydra-call</artifactId>
+            <artifactId>hydra-task</artifactId>
         </dependency>
 
         <dependency>
