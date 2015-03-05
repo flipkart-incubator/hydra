@@ -10,10 +10,6 @@ or output from already completed tasks. Same is the case with final response.
 
 ## Quick Usage
 
-### Get the Jar
-
-#### Maven
-
 Add following to `<repositories/>` section of pom.xml -
 ```xml
 <repository>
