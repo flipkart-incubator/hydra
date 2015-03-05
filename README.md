@@ -44,6 +44,15 @@ Dispatcher dispatcher = new DefaultDispatcher();
 Object output = defaultDispatcher.execute(initialParams, tasks, response);
 ```
 
+## Changes
+
+The change log can be found [here](https://github.com/flipkart-incubator/hydra/blob/master/CHANGES.md)
+
+## Contribution, Bugs and Feedback
+
+For bugs, questions and discussions please use the [Github Issues](https://github.com/flipkart-incubator/hydra/issues).
+Please follow the [contribution guidelines](https://github.com/flipkart-incubator/hydra/blob/master/CONTRIBUTING.md) when submitting pull requests.
+
 ## Salient Points
 + Easy to use interfaces
 + Auto creation/resolution of dependencies graph
