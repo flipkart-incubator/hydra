@@ -4,11 +4,35 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.flipkart</groupId>
+    <name>Hydra</name>
+    <description>A JVM based DispatcherComposer Engine.</description>
+    <url>https://git@github.com/flipkart-incubator/hydra</url>
+
+    <groupId>com.flipkart.hydra</groupId>
     <artifactId>hydra</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
+
+    <scm>
+        <connection>scm:git:https://github.com/flipkart-incubator/hydra.git</connection>
+        <developerConnection>scm:git:https://github.com/flipkart-incubator/hydra.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/flipkart-incubator/hydra</url>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <modules>
         <module>hydra-dispatcher</module>
@@ -65,14 +89,9 @@
 
     <distributionManagement>
         <repository>
-            <id>central</id>
-            <name>libs-releases</name>
-            <url>http://artifactory.nm.flipkart.com:8081/artifactory/libs-releases</url>
+            <id>clojars</id>
+            <name>Clojars repository</name>
+            <url>https://clojars.org/repo</url>
         </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>libs-snapshots</name>
-            <url>http://artifactory.nm.flipkart.com:8081/artifactory/libs-snapshots</url>
-        </snapshotRepository>
     </distributionManagement>
 </project>
