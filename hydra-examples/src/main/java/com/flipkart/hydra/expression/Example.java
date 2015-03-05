@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Explanation -
@@ -59,10 +61,13 @@ public class Example {
             put("v3", "{{$taskParam4}}");
         }};
 
-        DefaultDispatcher defaultDispatcher = new DefaultDispatcher();
-        Object response = defaultDispatcher.execute(initialParams, tasks, responseContext);
+        ExecutorService executor = Executors.newCachedThreadPool();
+        DefaultDispatcher defaultDispatcher = new DefaultDispatcher(executor);
 
+        Object response = defaultDispatcher.execute(initialParams, tasks, responseContext);
         System.out.println(response);
+        
+        executor.shutdown();
     }
 
     private static HashMap<String, Object> getInitialParams() {
