@@ -44,6 +44,11 @@ Dispatcher dispatcher = new DefaultDispatcher();
 Object output = defaultDispatcher.execute(initialParams, tasks, response);
 ```
 
+## Salient Points
++ Easy to use interfaces
++ Auto creation/resolution of dependencies graph
++ Notation to express variables/expressions
+
 ## Changes
 
 The change log can be found [here](https://github.com/flipkart-incubator/hydra/blob/master/CHANGES.md)
@@ -52,11 +57,6 @@ The change log can be found [here](https://github.com/flipkart-incubator/hydra/b
 
 For bugs, questions and discussions please use the [Github Issues](https://github.com/flipkart-incubator/hydra/issues).
 Please follow the [contribution guidelines](https://github.com/flipkart-incubator/hydra/blob/master/CONTRIBUTING.md) when submitting pull requests.
-
-## Salient Points
-+ Easy to use interfaces
-+ Auto creation/resolution of dependencies graph
-+ Notation to express variables/expressions
 
 ##License
 
