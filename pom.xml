@@ -6,7 +6,7 @@
 
     <name>Hydra</name>
     <description>A JVM based DispatcherComposer Engine.</description>
-    <url>https://git@github.com/flipkart-incubator/hydra</url>
+    <url>http://flipkart-incubator.github.io/hydra/</url>
 
     <groupId>com.flipkart.hydra</groupId>
     <artifactId>hydra</artifactId>
