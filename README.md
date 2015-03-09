@@ -75,7 +75,7 @@ Add following to `<dependencies/>` section of your pom.xml -
 <dependency>
   <groupId>com.flipkart.hydra</groupId>
   <artifactId>hydra-dispatcher</artifactId>
-  <version>1.1</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
