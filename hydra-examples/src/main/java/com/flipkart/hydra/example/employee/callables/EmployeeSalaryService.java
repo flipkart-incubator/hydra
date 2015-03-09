@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package com.flipkart.hydra.expression;
+package com.flipkart.hydra.example.employee.callables;
 
-import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class NullValueCallable implements Callable {
+public class EmployeeSalaryService implements Callable {
 
-    private final Map<String, Object> values;
+    private final Object employeeName;
 
-    public NullValueCallable(Map<String, Object> values) {
-        this.values = values;
+    public EmployeeSalaryService(Object employeeId) {
+        this.employeeName = employeeId;
     }
 
     @Override
     public Object call() throws Exception {
-        return null;
+        return 2000;
     }
 }

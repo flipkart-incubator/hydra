@@ -168,6 +168,8 @@ Dispatcher dispatcher = new DefaultDispatcher();
 Object output = dispatcher.execute(initialParams, tasks, response);
 ```
 
+> Code for this example can be seen [here](https://github.com/flipkart-incubator/hydra/blob/master/hydra-examples/src/main/java/com/flipkart/hydra/example/employee/EmployeeExample.java).
+
 ## Salient Points
 + Easy to use interfaces
 + Auto creation/resolution of dependencies graph

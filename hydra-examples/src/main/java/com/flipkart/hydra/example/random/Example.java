@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.flipkart.hydra.expression;
+package com.flipkart.hydra.example.random;
 
 import com.flipkart.hydra.composer.Composer;
 import com.flipkart.hydra.composer.exception.ComposerEvaluationException;
