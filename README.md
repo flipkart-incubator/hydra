@@ -112,31 +112,31 @@ Object output = dispatcher.execute(initialParams, tasks, response);
 
 ### Steps
 
-1. Create the initial set of parameters -
+##### Create the initial set of parameters -
 ```java
 Map<String, Object> initialParams = new HashMap<>();
 initialParams.put("employeeName", "John Doe");
 ```
 
-2. Create a list of `Task`s to be performed -
-##### Task 1 - Fetching `employeeID` from `employeeName`
+##### Create a list of `Task`s to be performed -
+###### Task 1 - Fetching `employeeID` from `employeeName`
 ```java
 Expression expression1 = new DefaultExpression("{{$employeeName}}");
 Composer composer1 = new DefaultComposer(expression1, true);
 Task employeeIDTask = new DefaultTask(EmployeeIdentificationService.class, composer1);
 ```
-##### Task 2 - Fetching `joiningDate` from `employeeName`
+###### Task 2 - Fetching `joiningDate` from `employeeName`
 ```java
 // Short notation for creating expression on the fly
 Composer composer2 = new DefaultComposer("{{$employeeName}}");
 Task joiningDateTask = new DefaultTask(EmployeeInfoService.class, composer2);
 ```
-##### Task 3 - Fetching `department` from `employeeID`
+###### Task 3 - Fetching `department` from `employeeID`
 ```java
 // Short notation for creating composer on the fly
 Task departmentTask = new DefaultTask(EmployeeDepartmentService.class, "{{$employeeID}}");
 ```
-##### Task 4 - Fetching `salary` from `employeeID`
+###### Task 4 - Fetching `salary` from `employeeID`
 ```java
 Task salaryTask = new DefaultTask(EmployeeSalaryService.class, "{{$employeeID}}");
 ```
@@ -149,7 +149,7 @@ tasks.put("department", departmentTask);
 tasks.put("employeeID", employeeIDTask);
 ```
 
-3. Create the response curator
+##### Create the response curator
 ```java
 Map<String, Object> responseContext = new HashMap<>();
 responseContext.put("employeeName", "{{$employeeName}}");
@@ -162,7 +162,7 @@ responseContext.put("salary", "{{#$salary}}"); // Optional data - will not fail 
 Composer response = new DefaultComposer(responseContext);
 ```
 
-4. Dispatch
+##### Dispatch
 ```java
 Dispatcher dispatcher = new DefaultDispatcher();
 Object output = dispatcher.execute(initialParams, tasks, response);
