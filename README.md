@@ -24,7 +24,7 @@ Add following to `<dependencies/>` section of your pom.xml -
 <dependency>
   <groupId>com.flipkart.hydra</groupId>
   <artifactId>dispatcher</artifactId>
-  <version>0.1</version>
+  <version>1.0</version>
 </dependency>
 ```
 
