@@ -33,12 +33,105 @@
 
 <p>Hydra is a JVM based DispatcherComposer Engine.</p>
 
-<p>Basically, you define the tasks to be performed and the input required for each of those tasks.
-From then on Hydra takes over - It creates the dependency graph, performs tasks in required
-order and composes the final output.</p>
+<p>Basically, you define the tasks to be performed and the input required for each of those tasks. From then on Hydra takes over - It creates the dependency graph, performs tasks in required order and composes the final output.</p>
 
-<p>For each task to be performed, the input can be composed on any of the initial input parameters
-or output from already completed tasks. Same is the case with final response.</p>
+<p>For each task to be performed, the input can be composed on any of the initial input parameters or output from already completed tasks. Same is the case with final response.</p>
+
+<h2>
+<a id="glossary" class="anchor" href="#glossary" aria-hidden="true"><span class="octicon octicon-link"></span></a>Glossary</h2>
+
+<h4>
+<a id="dispatcher" class="anchor" href="#dispatcher" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>Dispatcher</code>
+</h4>
+
+<p><code>Dispatcher</code> is the top-level orchestrator. A Hydra <code>Dispatcher</code> execution comprises of -</p>
+
+<ul>
+<li>Already realized, initial map of parameters - <code>Map&lt;String, Object&gt;</code>
+</li>
+<li>An unordered map of <code>Task</code>s to be performed - <code>Map&lt;String, Task&gt;</code>
+</li>
+<li>A response curator - <code>Composer</code>
+</li>
+</ul>
+
+<blockquote>
+<p>Hydra provides a default implementation of <code>Dispatcher</code> (<code>DefaultDispatcher</code>) which can be initialized with or without a <code>Executor</code></p>
+
+<p><code>DefaultDispatcher</code> allows for the use of a <code>Object</code> context (which is used to instantiate a <code>DefaultComposer</code> on the fly) as the response curator.</p>
+</blockquote>
+
+<h4>
+<a id="task" class="anchor" href="#task" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>Task</code>
+</h4>
+
+<p>A <code>Task</code> is a combination of a <code>Composer</code> and a <code>Callable</code></p>
+
+<ul>
+<li>The <code>Composer</code> is the input curator for the <code>Callable</code>.</li>
+<li>Output from <code>call()</code> of this <code>Callable</code> is the response of this <code>Task</code>.</li>
+</ul>
+
+<blockquote>
+<p>Hydra provides a default implementation of <code>Task</code> (<code>DefaultTask</code>) which is initialized with -</p>
+
+<ul>
+<li>A <code>Callable</code> class that is instantiated on the fly. This class needs to have a single argument constructor which is used to instantiate it with a <code>Composer</code> output.</li>
+<li>A <code>Composer</code> or a <code>Object</code> context (which is used to instantiate a <code>DefaultComposer</code> on the fly)</li>
+</ul>
+</blockquote>
+
+<h4>
+<a id="composer" class="anchor" href="#composer" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>Composer</code>
+</h4>
+
+<p>A <code>Composer</code> composes the given structure (<code>Map</code>, <code>List</code>, <code>String</code> or <code>Number</code>) based on previously realized values.</p>
+
+<blockquote>
+<p>Hydra provides a default implementation of <code>Composer</code> (<code>DefaultComposer</code>) which can take a nested collection and can extract out required dependencies and <code>Expression</code>s that need to be realized.</p>
+
+<p><code>Expression</code>s to be parsed are represented by sandwiching a <code>String</code> between <code>{{</code> and <code>}}</code> and are converted to <code>DefaultExpression</code>.</p>
+
+<h6>
+<a id="examples--" class="anchor" href="#examples--" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples -</h6>
+
+<ol>
+<li><code>{{$someVar}}</code></li>
+<li><code>{{$someMap.someKey}}</code></li>
+</ol>
+</blockquote>
+
+<h4>
+<a id="expression" class="anchor" href="#expression" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>Expression</code>
+</h4>
+
+<p>An <code>Expression</code> is a string representation of a data-path.</p>
+
+<blockquote>
+<p>Hydra provides a default implementation of <code>Expression</code> (<code>DefaultExpression</code>) which represents an expression as <code>String</code>.</p>
+
+<p>Every variable in the expression starts with a <code>$</code>.</p>
+
+<p>An <code>Expression</code> can be marked as optional by starting it with <code>#</code>. An optional expression means that <code>null</code> is a valid output. And an exception faced while realizing this expression will also respond back with <code>null</code>.</p>
+
+<h6>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples:</h6>
+
+<ol>
+<li>
+<code>someConstant</code> or <code>1.0</code> or <code>1</code> are static expressions with no variables</li>
+<li>
+<code>$someVar</code> is a variable expression that returns the value of <code>someVar</code>
+</li>
+<li>
+<code>$someMap.someKey</code> is a variable expression that returns value of <code>someKey</code> from <code>someMap</code>
+</li>
+<li>
+<code>$someMap.someKey[$someList[0]]</code> is a complex expression depending on more than 1 variable</li>
+<li>
+<code>#someMap.someKey</code> is an optional expression and will return <code>null</code> if <code>someMap</code> is <code>null</code> or if <code>someMap.someKey</code> is <code>null</code> or non-existent.</li>
+</ol>
+</blockquote>
 
 <h2>
 <a id="quick-usage" class="anchor" href="#quick-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick Usage</h2>
@@ -55,8 +148,8 @@ or output from already completed tasks. Same is the case with final response.</p
 
 <div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
   &lt;<span class="pl-ent">groupId</span>&gt;com.flipkart.hydra&lt;/<span class="pl-ent">groupId</span>&gt;
-  &lt;<span class="pl-ent">artifactId</span>&gt;dispatcher&lt;/<span class="pl-ent">artifactId</span>&gt;
-  &lt;<span class="pl-ent">version</span>&gt;0.1&lt;/<span class="pl-ent">version</span>&gt;
+  &lt;<span class="pl-ent">artifactId</span>&gt;hydra-dispatcher&lt;/<span class="pl-ent">artifactId</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;1.1&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>You can now, call <code>Dispatcher</code> using following code</p>
@@ -72,7 +165,111 @@ or output from already completed tasks. Same is the case with final response.</p
 
 <span class="pl-c">// Dispatcher Call</span>
 <span class="pl-stj">Dispatcher</span> dispatcher <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultDispatcher</span>();
-<span class="pl-stj">Object</span> output <span class="pl-k">=</span> defaultDispatcher<span class="pl-k">.</span>execute(initialParams, tasks, response);</pre></div>
+<span class="pl-stj">Object</span> output <span class="pl-k">=</span> dispatcher<span class="pl-k">.</span>execute(initialParams, tasks, response);</pre></div>
+
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<h3>
+<a id="assumptions" class="anchor" href="#assumptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Assumptions</h3>
+
+<ul>
+<li>We already have an Employee Name.</li>
+<li>Assuming all employees have unique names, we want to fetch -
+
+<ul>
+<li>Employee ID (provided by EmployeeIdentificationService)</li>
+<li>Employee Joining Date (provided by EmployeeInfoService)</li>
+</ul>
+</li>
+<li>Now using Employee ID, we want to fetch -
+
+<ul>
+<li>His department (provided by EmployeeDepartmentService)</li>
+<li>His salary (provided by EmployeeSalaryService)
+
+<ul>
+<li>This information might be confidential and hence can throw UnauthorizedException</li>
+<li>We don't want to fail in this case</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Now we want to respond back with all this information</li>
+</ul>
+
+<h3>
+<a id="steps" class="anchor" href="#steps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Steps</h3>
+
+<ol>
+<li>Create the initial set of parameters -</li>
+</ol>
+
+<div class="highlight highlight-java"><pre><span class="pl-st">Map&lt;<span class="pl-stj">String</span>, <span class="pl-stj">Object</span>&gt;</span> initialParams <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-st">HashMap&lt;&gt;</span>();
+initialParams<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>employeeName<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>John Doe<span class="pl-pds">"</span></span>);</pre></div>
+
+<ol>
+<li>Create a list of <code>Task</code>s to be performed -
+##### Task 1 - Fetching <code>employeeID</code> from <code>employeeName</code>
+</li>
+</ol>
+
+<div class="highlight highlight-java"><pre><span class="pl-stj">Expression</span> expression1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultExpression</span>(<span class="pl-s1"><span class="pl-pds">"</span>{{$employeeName}}<span class="pl-pds">"</span></span>);
+<span class="pl-stj">Composer</span> composer1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultComposer</span>(expression1, <span class="pl-c1">true</span>);
+<span class="pl-stj">Task</span> employeeIDTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultTask</span>(<span class="pl-stj">EmployeeIdentificationService</span><span class="pl-k">.</span>class, composer1);</pre></div>
+
+<h5>
+<a id="task-2---fetching-joiningdate-from-employeename" class="anchor" href="#task-2---fetching-joiningdate-from-employeename" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 2 - Fetching <code>joiningDate</code> from <code>employeeName</code>
+</h5>
+
+<div class="highlight highlight-java"><pre><span class="pl-c">// Short notation for creating expression on the fly</span>
+<span class="pl-stj">Composer</span> composer2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultComposer</span>(<span class="pl-s1"><span class="pl-pds">"</span>{{$employeeName}}<span class="pl-pds">"</span></span>);
+<span class="pl-stj">Task</span> joiningDateTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultTask</span>(<span class="pl-stj">EmployeeInfoService</span><span class="pl-k">.</span>class, composer2);</pre></div>
+
+<h5>
+<a id="task-3---fetching-department-from-employeeid" class="anchor" href="#task-3---fetching-department-from-employeeid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 3 - Fetching <code>department</code> from <code>employeeID</code>
+</h5>
+
+<div class="highlight highlight-java"><pre><span class="pl-c">// Short notation for creating composer on the fly</span>
+<span class="pl-stj">Task</span> departmentTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultTask</span>(<span class="pl-stj">EmployeeDepartmentService</span><span class="pl-k">.</span>class, <span class="pl-s1"><span class="pl-pds">"</span>{{$employeeID}}<span class="pl-pds">"</span></span>);</pre></div>
+
+<h5>
+<a id="task-4---fetching-salary-from-employeeid" class="anchor" href="#task-4---fetching-salary-from-employeeid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 4 - Fetching <code>salary</code> from <code>employeeID</code>
+</h5>
+
+<div class="highlight highlight-java"><pre><span class="pl-stj">Task</span> salaryTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultTask</span>(<span class="pl-stj">EmployeeSalaryService</span><span class="pl-k">.</span>class, <span class="pl-s1"><span class="pl-pds">"</span>{{$employeeID}}<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>Finally collecting all <code>Task</code>s in a <code>Map</code></p>
+
+<div class="highlight highlight-java"><pre><span class="pl-st">Map&lt;<span class="pl-stj">String</span>, <span class="pl-stj">Task</span>&gt;</span> tasks <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-st">HashMap&lt;&gt;</span>();
+tasks<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>joiningDate<span class="pl-pds">"</span></span>, joiningDateTask);
+tasks<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>salary<span class="pl-pds">"</span></span>, salaryTask);
+tasks<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>department<span class="pl-pds">"</span></span>, departmentTask);
+tasks<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>employeeID<span class="pl-pds">"</span></span>, employeeIDTask);</pre></div>
+
+<ol>
+<li>Create the response curator</li>
+</ol>
+
+<div class="highlight highlight-java"><pre><span class="pl-st">Map&lt;<span class="pl-stj">String</span>, <span class="pl-stj">Object</span>&gt;</span> responseContext <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-st">HashMap&lt;&gt;</span>();
+responseContext<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>employeeName<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>{{$employeeName}}<span class="pl-pds">"</span></span>);
+responseContext<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>employeeID<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>{{$employeeID}}<span class="pl-pds">"</span></span>);
+responseContext<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>department<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>{{$department}}<span class="pl-pds">"</span></span>);
+responseContext<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>salary<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>{{#$salary}}<span class="pl-pds">"</span></span>); <span class="pl-c">// Optional data - will not fail on null value</span></pre></div>
+
+<div class="highlight highlight-java"><pre><span class="pl-c">// This recursively iterates over the responseContext and parses any expression that it finds.</span>
+<span class="pl-stj">Composer</span> response <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultComposer</span>(responseContext);</pre></div>
+
+<ol>
+<li>Dispatch</li>
+</ol>
+
+<div class="highlight highlight-java"><pre><span class="pl-stj">Dispatcher</span> dispatcher <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultDispatcher</span>();
+<span class="pl-stj">Object</span> output <span class="pl-k">=</span> dispatcher<span class="pl-k">.</span>execute(initialParams, tasks, response);</pre></div>
+
+<blockquote>
+<p>Code for this example can be seen <a href="https://github.com/flipkart-incubator/hydra/blob/master/hydra-examples/src/main/java/com/flipkart/hydra/example/employee/EmployeeExample.java">here</a>.</p>
+</blockquote>
 
 <h2>
 <a id="salient-points" class="anchor" href="#salient-points" aria-hidden="true"><span class="octicon octicon-link"></span></a>Salient Points</h2>
