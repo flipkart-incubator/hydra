@@ -16,18 +16,22 @@
 
 package com.flipkart.hydra.example.employee.callables;
 
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 
-public class EmployeeSalaryService implements Callable {
+public class EmployeeLocationService implements Callable {
 
     private final Object employeeName;
 
-    public EmployeeSalaryService(Object employeeId) {
+    public EmployeeLocationService(Object employeeId) {
         this.employeeName = employeeId;
     }
 
     @Override
     public Object call() throws Exception {
-        return null;
+        return new HashMap<String, String>() {{
+            put("city", "Bangalore");
+            put("country", "India");
+        }};
     }
 }

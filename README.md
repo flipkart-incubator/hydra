@@ -97,7 +97,7 @@ Object output = dispatcher.execute(initialParams, tasks, response);
 
 ## Example
 
-### Assumptions
+### Description
 
 + We already have an Employee Name.
 + Assuming all employees have unique names, we want to fetch -
@@ -108,6 +108,7 @@ Object output = dispatcher.execute(initialParams, tasks, response);
     + His salary (provided by EmployeeSalaryService)
         + This information might be confidential and hence can throw UnauthorizedException
         + We don't want to fail in this case
+    + His city (provided as part of response by EmployeeLocationService)
 + Now we want to respond back with all this information
 
 ### Steps
@@ -140,6 +141,10 @@ Task departmentTask = new DefaultTask(EmployeeDepartmentService.class, "{{$emplo
 ```java
 Task salaryTask = new DefaultTask(EmployeeSalaryService.class, "{{$employeeID}}");
 ```
+###### Task 5 - Fetching `location` from `employeeName`
+```java
+Task locationTask = new DefaultTask(EmployeeLocationService.class, "{{$employeeName}}");
+```
 Finally collecting all `Task`s in a `Map`
 ```java
 Map<String, Task> tasks = new HashMap<>();
@@ -147,6 +152,7 @@ tasks.put("joiningDate", joiningDateTask);
 tasks.put("salary", salaryTask);
 tasks.put("department", departmentTask);
 tasks.put("employeeID", employeeIDTask);
+tasks.put("location", locationTask);
 ```
 
 ##### Create the response curator
@@ -156,6 +162,7 @@ responseContext.put("employeeName", "{{$employeeName}}");
 responseContext.put("employeeID", "{{$employeeID}}");
 responseContext.put("department", "{{$department}}");
 responseContext.put("salary", "{{#$salary}}"); // Optional data - will not fail on null value
+responseContext.put("city", "{{$location.city}}"); // Using expressions to extract part of data
 ```
 ```java
 // This recursively iterates over the responseContext and parses any expression that it finds.

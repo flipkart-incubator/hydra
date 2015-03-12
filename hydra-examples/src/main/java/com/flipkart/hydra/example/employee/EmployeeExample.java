@@ -23,10 +23,7 @@ import com.flipkart.hydra.composer.exception.ComposerInstantiationException;
 import com.flipkart.hydra.dispatcher.DefaultDispatcher;
 import com.flipkart.hydra.dispatcher.Dispatcher;
 import com.flipkart.hydra.dispatcher.exception.DispatchFailedException;
-import com.flipkart.hydra.example.employee.callables.EmployeeDepartmentService;
-import com.flipkart.hydra.example.employee.callables.EmployeeIdentificationService;
-import com.flipkart.hydra.example.employee.callables.EmployeeInfoService;
-import com.flipkart.hydra.example.employee.callables.EmployeeSalaryService;
+import com.flipkart.hydra.example.employee.callables.*;
 import com.flipkart.hydra.expression.DefaultExpression;
 import com.flipkart.hydra.expression.Expression;
 import com.flipkart.hydra.expression.exception.ExpressionParseException;
@@ -71,10 +68,13 @@ public class EmployeeExample {
 
         Task salaryTask = new DefaultTask(EmployeeSalaryService.class, "{{$employeeID}}");
 
+        Task locationTask = new DefaultTask(EmployeeLocationService.class, "{{$employeeName}}");
+
         tasks.put("joiningDate", joiningDateTask);
         tasks.put("salary", salaryTask);
         tasks.put("department", departmentTask);
         tasks.put("employeeID", employeeIDTask);
+        tasks.put("location", locationTask);
 
         return tasks;
     }
@@ -87,6 +87,9 @@ public class EmployeeExample {
 
         // Optional data - will not fail on null value
         responseContext.put("salary", "{{#$salary}}");
+
+        // Using expressions to extract part of data
+        responseContext.put("city", "{{$location.city}}");
 
         // This recursively iterates over the responseContext and parses any expression that it finds.
         return new DefaultComposer(responseContext);
