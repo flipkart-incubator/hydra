@@ -21,6 +21,14 @@
         <url>https://github.com/flipkart-incubator/hydra</url>
     </scm>
 
+    <developers>
+        <developer>
+            <id>harshmoorjani</id>
+            <name>Harsh Moorjani</name>
+            <email>harshm@flipkart.com</email>
+        </developer>
+    </developers>
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
