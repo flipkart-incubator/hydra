@@ -21,6 +21,8 @@ import com.flipkart.hydra.composer.exception.ComposerEvaluationException;
 import com.flipkart.hydra.composer.exception.ComposerInstantiationException;
 import com.flipkart.hydra.dispatcher.DefaultDispatcher;
 import com.flipkart.hydra.dispatcher.exception.DispatchFailedException;
+import com.flipkart.hydra.example.random.callables.EchoValueCallable;
+import com.flipkart.hydra.example.random.callables.NullValueCallable;
 import com.flipkart.hydra.task.DefaultTask;
 import com.flipkart.hydra.task.Task;
 

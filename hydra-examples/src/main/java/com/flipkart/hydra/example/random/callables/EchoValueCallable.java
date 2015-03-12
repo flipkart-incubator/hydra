@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.flipkart.hydra.example.random;
+package com.flipkart.hydra.example.random.callables;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
