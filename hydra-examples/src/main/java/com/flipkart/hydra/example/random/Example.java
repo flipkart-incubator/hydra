@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2015 Flipkart Internet, pvt ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
+/*
  * Explanation -
  *
  * Dispatcher receives 2 parameters as initial input (initialParam1, initialParam2)
@@ -84,7 +84,7 @@ public class Example {
 
         Object response = defaultDispatcher.execute(initialParams, tasks, responseContext);
         System.out.println(response);
-        
+
         executor.shutdown();
     }
 
