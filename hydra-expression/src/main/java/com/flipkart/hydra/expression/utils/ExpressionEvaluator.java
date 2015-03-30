@@ -59,6 +59,12 @@ public class ExpressionEvaluator {
                 } else {
                     throw new ExpressionEvaluationException("Invalid operand - " + operand);
                 }
+            } else if (response.getClass().isArray()) {
+                if (operand instanceof Integer) {
+                    response = ((Object[]) response)[(Integer) operand];
+                } else {
+                    throw new ExpressionEvaluationException("Invalid operand - " + operand);
+                }
             } else if (response instanceof Map) {
                 Object possibleResponse = ((Map) response).get(operand);
                 response = possibleResponse != null ? possibleResponse : ((Map) response).get(String.valueOf(operand));
