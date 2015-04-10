@@ -8,12 +8,12 @@
     <description>Task</description>
 
     <artifactId>hydra-task</artifactId>
-    <version>1.0.1</version>
+    <version>1.1</version>
 
     <parent>
         <groupId>com.flipkart.hydra</groupId>
         <artifactId>hydra</artifactId>
-        <version>1.0.1</version>
+        <version>1.1</version>
     </parent>
 
     <packaging>jar</packaging>
