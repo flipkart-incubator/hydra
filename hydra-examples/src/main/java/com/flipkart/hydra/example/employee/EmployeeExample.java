@@ -44,6 +44,7 @@ public class EmployeeExample {
         Object output = dispatcher.execute(initialParams, tasks, response);
 
         System.out.println(output);
+        dispatcher.shutdown();
     }
 
     private static Map<String, Object> getInitialParams() {

@@ -32,13 +32,15 @@ import java.util.concurrent.*;
 
 public class DefaultDispatcher implements Dispatcher {
 
+    private final ExecutorService executor;
     private final ExecutorCompletionService<Object> completionService;
 
     public DefaultDispatcher() {
         this(Executors.newCachedThreadPool());
     }
 
-    public DefaultDispatcher(Executor executor) {
+    public DefaultDispatcher(ExecutorService executor) {
+        this.executor = executor;
         completionService = new ExecutorCompletionService<>(executor);
     }
 
@@ -64,6 +66,11 @@ public class DefaultDispatcher implements Dispatcher {
         List<String> dependencies = composer.getDependencies();
         Map<String, Object> collectedDependencies = collectDependencies(responses, dependencies);
         return composer.compose(collectedDependencies);
+    }
+
+    @Override
+    public void shutdown() {
+        executor.shutdown();
     }
 
     private Map<String, Object> dispatchAndCollect(Map<String, Object> params, Map<String, Task> tasks) throws DispatchFailedException, ComposerEvaluationException {
