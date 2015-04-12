@@ -20,10 +20,10 @@ import java.util.concurrent.Callable;
 
 public class EmployeeSalaryService implements Callable {
 
-    private final Object employeeName;
+    private final Object employeeId;
 
     public EmployeeSalaryService(Object employeeId) {
-        this.employeeName = employeeId;
+        this.employeeId = employeeId;
     }
 
     @Override
