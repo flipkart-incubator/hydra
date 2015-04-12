@@ -20,6 +20,7 @@ import com.flipkart.hydra.expression.exception.ExpressionParseException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ExpressionParser {
 
@@ -41,30 +42,53 @@ public class ExpressionParser {
             c = expression.charAt(i);
             if (isAllowedChar(c)) {
                 token += c;
-            } else if (c == '[' || c == '.') {
+            } else if (c == '[' || c == '(' || c == '.') {
                 if ("".equals(token) || "$".equals(token)) {
-                    throw new ExpressionParseException(expression, "a-z A-Z 0-9 _ . [", c, i + 1);
+                    if (c != '(') {
+                        throw new ExpressionParseException(expression, "a-z A-Z 0-9 _ . [ (", c, i + 1);
+                    }
                 }
 
-                operands.add(token);
+                if (token != "$") {
+                    operands.add(token);
+                }
+
                 token = "";
                 int brackets = 0;
-                if (c == '[') {
+                if (c == '[' || c == '(') {
+                    char originalBracket = c;
+                    char inverseBracket = (c == '[' ? ']' : ')');
                     for (; i < expression.length(); i++) {
                         c = expression.charAt(i);
                         switch (c) {
                             case '[':
-                                brackets++;
+                            case '(':
+                                if (brackets != 0) {
+                                    token += c;
+                                }
+                                brackets += (c == originalBracket ? 1 : 0);
                                 break;
                             case ']':
-                                brackets--;
+                            case ')':
+                                brackets -= (c == inverseBracket ? 1 : 0);
+                                if (brackets != 0) {
+                                    token += c;
+                                }
                                 break;
                             default:
                                 token += c;
                         }
 
                         if (brackets == 0) {
-                            operands.add(parseSubExpression(expression, token, i + 1));
+                            switch (originalBracket) {
+                                case '[':
+                                    operands.add(parseSubExpression(expression, token, i + 1));
+                                    break;
+                                case '(':
+                                    operands.add(parseFunction(expression, token, i + 1));
+                                    break;
+                            }
+
                             token = "";
                             break;
                         }
@@ -79,12 +103,12 @@ public class ExpressionParser {
                     }
                 }
             } else {
-                throw new ExpressionParseException(expression, "a-z A-Z 0-9 _ . [ ", c, i + 1);
+                throw new ExpressionParseException(expression, "a-z A-Z 0-9 _ . [ (", c, i + 1);
             }
         }
 
         if ("".equals(token) || "$".equals(token)) {
-            if (c != ']') {
+            if (c != ']' && c != ')') {
                 throw new ExpressionParseException(expression, "a-z A-Z 0-9 _", "EOF", expression.length());
             }
         } else {
@@ -92,6 +116,58 @@ public class ExpressionParser {
         }
 
         return operands;
+    }
+
+    private static List<Object> parseFunction(String expression, String subExpression, int position) throws ExpressionParseException {
+        try {
+            List<Object> operands = new ArrayList<>();
+            int bracketsA = 0;
+            int bracketsB = 0;
+            String token = "";
+            for (int i = 0; i <= subExpression.length(); i++) {
+                char c = (i == subExpression.length() ? ',' : subExpression.charAt(i));
+                switch (c) {
+                    case '[':
+                        bracketsA++;
+                        break;
+                    case '(':
+                        bracketsB++;
+                        break;
+                    case ']':
+                        bracketsA--;
+                        break;
+                    case ')':
+                        bracketsB--;
+                        break;
+                }
+
+                if (c == ',') {
+                    if (bracketsA == 0 && bracketsB == 0) {
+                        if (operands.size() == 0) {
+                            verifyFunctionName(token);
+                            operands.add(token + "()");
+                        } else {
+                            operands.add(parseSubExpression(subExpression, token, i + 1));
+                        }
+                        token = "";
+                    } else {
+                        token += c;
+                    }
+                } else {
+                    token += c;
+                }
+            }
+
+            return operands;
+        } catch (ExpressionParseException e) {
+            throw new ExpressionParseException(expression, subExpression, position);
+        }
+    }
+
+    private static void verifyFunctionName(String subExpression) throws ExpressionParseException {
+        if (!Pattern.matches("[a-zA-Z][a-zA-Z0-9]*", subExpression)) {
+            throw new ExpressionParseException("Invalid function name - " + subExpression);
+        }
     }
 
     private static List parseSubExpression(String expression, String subExpression, int position) throws ExpressionParseException {
