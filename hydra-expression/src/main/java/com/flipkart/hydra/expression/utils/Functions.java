@@ -16,6 +16,35 @@
 
 package com.flipkart.hydra.expression.utils;
 
+import com.google.common.base.Joiner;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class Functions {
-    
+
+    public static List keys(Map map) {
+        if (map != null) {
+            return new ArrayList(map.keySet());
+        }
+
+        return new ArrayList();
+    }
+
+    public static List values(Map map) {
+        if (map != null) {
+            return new ArrayList(map.values());
+        }
+
+        return new ArrayList();
+    }
+
+    public static String join(List list) {
+        return Joiner.on(", ").join(list);
+    }
+
+    public static String join(Object[] list) {
+        return Joiner.on(", ").join(list);
+    }
 }
