@@ -92,6 +92,9 @@ public class EmployeeExample {
         // Using expressions to extract part of data
         responseContext.put("city", "{{$location.city}}");
 
+        // Using provided data access functions
+        responseContext.put("address", "{{$(join, $(values, $location))}}");
+
         // This recursively iterates over the responseContext and parses any expression that it finds.
         return new DefaultComposer(responseContext);
     }

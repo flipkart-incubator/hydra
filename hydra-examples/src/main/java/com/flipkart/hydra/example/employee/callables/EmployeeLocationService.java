@@ -16,7 +16,7 @@
 
 package com.flipkart.hydra.example.employee.callables;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.concurrent.Callable;
 
 public class EmployeeLocationService implements Callable {
@@ -29,8 +29,9 @@ public class EmployeeLocationService implements Callable {
 
     @Override
     public Object call() throws Exception {
-        return new HashMap<String, String>() {{
+        return new LinkedHashMap<String, String>() {{
             put("city", "Bangalore");
+            put("state", "Karnataka");
             put("country", "India");
         }};
     }

@@ -109,6 +109,7 @@ Object output = dispatcher.execute(initialParams, tasks, response);
         + This information might be confidential and hence can throw UnauthorizedException
         + We don't want to fail in this case
     + His city (provided as part of response by EmployeeLocationService)
+    + His complete address (provided as part of response by EmployeeLocationService)
 + Now we want to respond back with all this information
 
 ### Steps
@@ -163,6 +164,7 @@ responseContext.put("employeeID", "{{$employeeID}}");
 responseContext.put("department", "{{$department}}");
 responseContext.put("salary", "{{#$salary}}"); // Optional data - will not fail on null value
 responseContext.put("city", "{{$location.city}}"); // Using expressions to extract part of data
+responseContext.put("address", "{{$(join, $(values, $location))}}"); // Using provided data access functions
 ```
 ```java
 // This recursively iterates over the responseContext and parses any expression that it finds.

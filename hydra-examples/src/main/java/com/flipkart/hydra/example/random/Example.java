@@ -60,12 +60,13 @@ import java.util.concurrent.Executors;
  *      + taskParam5 = hardcodedValue
  *
  *   + Final Output
- *      {v1: initialParamValue1, v2: hardcodedValue, v3: {value1: initialParamValue1, value2: {subValue1: null, subValue1: fixedValue}}}
+ *      {v1: initialParamValue1, v2: hardcodedValue, v3: {value1: initialParamValue1, value2: {subValue1: null, subValue1: fixedValue}}, v4: [value2, value1, value3]}
  *
  * Illustrations -
  *   + Second and third tasks show the usage of output from previous tasks (and hence the dependency resolution)
  *   + Fourth task shows the usage of optional parameters (taskParam3)
  *   + Fifth task shows the usage of already created composer
+ *   + Final Output shows the usage of functions
  */
 
 public class Example {
@@ -77,6 +78,7 @@ public class Example {
             put("v1", "{{$taskParam1}}");
             put("v2", "{{$taskParam5}}");
             put("v3", "{{$taskParam4}}");
+            put("v4", "{{$(keys, $taskParam2)}}");
         }};
 
         ExecutorService executor = Executors.newCachedThreadPool();
