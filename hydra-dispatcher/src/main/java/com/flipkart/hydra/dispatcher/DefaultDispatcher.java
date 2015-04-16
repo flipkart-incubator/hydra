@@ -124,10 +124,9 @@ public class DefaultDispatcher implements Dispatcher {
         return collectedDependencies;
     }
 
-    private Future<Object> dispatchTask(Task task, Map<String, Object> responses) throws DispatchFailedException, ComposerEvaluationException {
+    private Future<Object> dispatchTask(Task task, Map<String, Object> responses) throws DispatchFailedException {
         try {
-            Composer composer = task.getComposer();
-            Callable<Object> callable = task.getCallable(composer.compose(responses));
+            Callable<Object> callable = task.getCallable(responses);
             return completionService.submit(callable);
         } catch (BadCallableException e) {
             throw new DispatchFailedException("Failed to dispatch task", e);

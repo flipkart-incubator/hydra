@@ -64,7 +64,7 @@ public class DefaultExpression implements Expression {
                 dependencies.addAll(findDependencies((List) value));
             } else if (value instanceof String) {
                 String stringValue = (String) value;
-                if (stringValue.startsWith("$")) {
+                if (stringValue.startsWith("$") && !stringValue.startsWith("$__")) {
                     dependencies.add(stringValue.substring(1));
                 }
             }
