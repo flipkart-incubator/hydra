@@ -70,11 +70,13 @@ public class ExpressionEvaluator {
     private static Method findFunction(String name, List args) throws ExpressionEvaluationException {
         Method[] methods = Functions.class.getDeclaredMethods();
         for (Method method : methods) {
-            if (method.getName().equals(name) && method.getParameterCount() == args.size()) {
+            boolean isVarArgs = method.isVarArgs();
+            if (method.getName().equals(name) && (method.getParameterCount() == args.size() || (isVarArgs && method.getParameterCount() < args.size()))) {
                 boolean match = true;
                 Class[] types = method.getParameterTypes();
-                for (int i = 0; i < types.length; i++) {
-                    if (!types[i].isInstance(args.get(i))) {
+                for (int i = 0; i < args.size(); i++) {
+                    int typeIndex = i < types.length ? i : types.length - 1;
+                    if (!types[typeIndex].isInstance(args.get(i))) {
                         match = false;
                         break;
                     }
