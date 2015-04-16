@@ -110,6 +110,7 @@ Object output = dispatcher.execute(initialParams, tasks, response);
         + We don't want to fail in this case
     + His city (provided as part of response by EmployeeLocationService)
     + His complete address (provided as part of response by EmployeeLocationService)
+    + Lat/Lng of all components of his address
 + Now we want to respond back with all this information
 
 ### Steps
@@ -146,6 +147,13 @@ Task salaryTask = new DefaultTask(EmployeeSalaryService.class, "{{$employeeID}}"
 ```java
 Task locationTask = new DefaultTask(EmployeeLocationService.class, "{{$employeeName}}");
 ```
+###### Task 6 - Fetching `latlng` for all components of `location`
+```java
+// MultiTask for executing callable once for each value of the provided looping composer
+// Composer can use $__key and $__value while iterating
+// We also need to provide a ExecutorService to MultiTask
+Task latLngTask = new DefaultMultiTask(executor, LatLngService.class, "{{$location}}", "{{$__value}}");
+```
 Finally collecting all `Task`s in a `Map`
 ```java
 Map<String, Task> tasks = new HashMap<>();
@@ -154,6 +162,7 @@ tasks.put("salary", salaryTask);
 tasks.put("department", departmentTask);
 tasks.put("employeeID", employeeIDTask);
 tasks.put("location", locationTask);
+tasks.put("latlng", latLngTask);
 ```
 
 ##### Create the response curator
@@ -165,15 +174,22 @@ responseContext.put("department", "{{$department}}");
 responseContext.put("salary", "{{#$salary}}"); // Optional data - will not fail on null value
 responseContext.put("city", "{{$location.city}}"); // Using expressions to extract part of data
 responseContext.put("address", "{{$(join, $(values, $location))}}"); // Using provided data access functions
+responseContext.put("latlng", "{{$latlng}}");
 ```
 ```java
 // This recursively iterates over the responseContext and parses any expression that it finds.
 Composer response = new DefaultComposer(responseContext);
 ```
 
+##### Create a ExecutorService
+```java
+private static final ExecutorService executor = Executors.newCachedThreadPool();
+```
+
 ##### Dispatch
 ```java
-Dispatcher dispatcher = new DefaultDispatcher();
+// Passing Optional Parameter (ExecutorService) so we can use the same for MultiTask
+Dispatcher dispatcher = new DefaultDispatcher(executor);
 Object output = dispatcher.execute(initialParams, tasks, response);
 ```
 

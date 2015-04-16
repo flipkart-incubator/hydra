@@ -27,20 +27,26 @@ import com.flipkart.hydra.example.employee.callables.*;
 import com.flipkart.hydra.expression.DefaultExpression;
 import com.flipkart.hydra.expression.Expression;
 import com.flipkart.hydra.expression.exception.ExpressionParseException;
+import com.flipkart.hydra.task.DefaultMultiTask;
 import com.flipkart.hydra.task.DefaultTask;
 import com.flipkart.hydra.task.Task;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class EmployeeExample {
+
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
 
     public static void main(String[] args) throws ComposerInstantiationException, ExpressionParseException, DispatchFailedException, ComposerEvaluationException {
         Map<String, Object> initialParams = getInitialParams();
         Map<String, Task> tasks = getTasks();
         Composer response = getResponseComposer();
 
-        Dispatcher dispatcher = new DefaultDispatcher();
+        // Passing Optional Parameter (ExecutorService) so we can use the same for MultiTask
+        Dispatcher dispatcher = new DefaultDispatcher(executor);
         Object output = dispatcher.execute(initialParams, tasks, response);
 
         System.out.println(output);
@@ -71,11 +77,17 @@ public class EmployeeExample {
 
         Task locationTask = new DefaultTask(EmployeeLocationService.class, "{{$employeeName}}");
 
+        // MultiTask for executing callable once for each value of the provided looping composer
+        // Composer can use $__key and $__value while iterating
+        // We also need to provide a ExecutorService to MultiTask
+        Task latLngTask = new DefaultMultiTask(executor, LatLngService.class, "{{$location}}", "{{$__value}}");
+
         tasks.put("joiningDate", joiningDateTask);
         tasks.put("salary", salaryTask);
         tasks.put("department", departmentTask);
         tasks.put("employeeID", employeeIDTask);
         tasks.put("location", locationTask);
+        tasks.put("latlng", latLngTask);
 
         return tasks;
     }
@@ -94,6 +106,8 @@ public class EmployeeExample {
 
         // Using provided data access functions
         responseContext.put("address", "{{$(join, $(values, $location))}}");
+
+        responseContext.put("latlng", "{{$latlng}}");
 
         // This recursively iterates over the responseContext and parses any expression that it finds.
         return new DefaultComposer(responseContext);
