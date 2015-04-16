@@ -1,34 +1,25 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>Hydra by flipkart-incubator</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Hydra</h1>
-        <p>A JVM based DispatcherComposer Engine</p>
+    <section class="page-header">
+      <h1 class="project-name">Hydra</h1>
+      <h2 class="project-tagline">A JVM based DispatcherComposer Engine</h2>
+      <a href="https://github.com/flipkart-incubator/hydra" class="btn">View on GitHub</a>
+      <a href="https://github.com/flipkart-incubator/hydra/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/flipkart-incubator/hydra/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <p class="view"><a href="https://github.com/flipkart-incubator/hydra">View the Project on GitHub <small>flipkart-incubator/hydra</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/flipkart-incubator/hydra/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/flipkart-incubator/hydra/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/flipkart-incubator/hydra">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
+    <section class="main-content">
+      <h1>
 <a id="hydra" class="anchor" href="#hydra" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hydra</h1>
 
 <p>Hydra is a JVM based DispatcherComposer Engine.</p>
@@ -155,23 +146,23 @@
 <p>You can now, call <code>Dispatcher</code> using following code</p>
 
 <div class="highlight highlight-java"><pre><span class="pl-c">// Already resolved list of parameters</span>
-<span class="pl-st">Map&lt;<span class="pl-stj">String</span>, <span class="pl-stj">Object</span>&gt;</span> initialParams <span class="pl-k">=</span> <span class="pl-c1">...</span>;
+<span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Object</span>&gt;</span> initialParams <span class="pl-k">=</span> <span class="pl-c1">...</span>;
 
 <span class="pl-c">// Map of tasks to be dispatched (mapped to the keys that will store the task response)</span>
-<span class="pl-st">Map&lt;<span class="pl-stj">String</span>, <span class="pl-stj">Task</span>&gt;</span> tasks <span class="pl-k">=</span> <span class="pl-c1">...</span>;
+<span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Task</span>&gt;</span> tasks <span class="pl-k">=</span> <span class="pl-c1">...</span>;
 
 <span class="pl-c">// Final response that needs to be realized</span>
-<span class="pl-st">Map&lt;<span class="pl-stj">String</span>, <span class="pl-stj">Object</span>&gt;</span> response <span class="pl-k">=</span> <span class="pl-c1">...</span>;
+<span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Object</span>&gt;</span> response <span class="pl-k">=</span> <span class="pl-c1">...</span>;
 
 <span class="pl-c">// Dispatcher Call</span>
-<span class="pl-stj">Dispatcher</span> dispatcher <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultDispatcher</span>();
-<span class="pl-stj">Object</span> output <span class="pl-k">=</span> dispatcher<span class="pl-k">.</span>execute(initialParams, tasks, response);</pre></div>
+<span class="pl-smi">Dispatcher</span> dispatcher <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultDispatcher</span>();
+<span class="pl-smi">Object</span> output <span class="pl-k">=</span> dispatcher<span class="pl-k">.</span>execute(initialParams, tasks, response);</pre></div>
 
 <h2>
 <a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
 
 <h3>
-<a id="assumptions" class="anchor" href="#assumptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Assumptions</h3>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description</h3>
 
 <ul>
 <li>We already have an Employee Name.</li>
@@ -193,6 +184,9 @@
 <li>We don't want to fail in this case</li>
 </ul>
 </li>
+<li>His city (provided as part of response by EmployeeLocationService)</li>
+<li>His complete address (provided as part of response by EmployeeLocationService)</li>
+<li>Lat/Lng of all components of his address</li>
 </ul>
 </li>
 <li>Now we want to respond back with all this information</li>
@@ -201,71 +195,95 @@
 <h3>
 <a id="steps" class="anchor" href="#steps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Steps</h3>
 
-<ol>
-<li>Create the initial set of parameters -</li>
-</ol>
+<h5>
+<a id="create-the-initial-set-of-parameters--" class="anchor" href="#create-the-initial-set-of-parameters--" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create the initial set of parameters -</h5>
 
-<div class="highlight highlight-java"><pre><span class="pl-st">Map&lt;<span class="pl-stj">String</span>, <span class="pl-stj">Object</span>&gt;</span> initialParams <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-st">HashMap&lt;&gt;</span>();
-initialParams<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>employeeName<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>John Doe<span class="pl-pds">"</span></span>);</pre></div>
-
-<ol>
-<li>Create a list of <code>Task</code>s to be performed -
-##### Task 1 - Fetching <code>employeeID</code> from <code>employeeName</code>
-</li>
-</ol>
-
-<div class="highlight highlight-java"><pre><span class="pl-stj">Expression</span> expression1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultExpression</span>(<span class="pl-s1"><span class="pl-pds">"</span>{{$employeeName}}<span class="pl-pds">"</span></span>);
-<span class="pl-stj">Composer</span> composer1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultComposer</span>(expression1, <span class="pl-c1">true</span>);
-<span class="pl-stj">Task</span> employeeIDTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultTask</span>(<span class="pl-stj">EmployeeIdentificationService</span><span class="pl-k">.</span>class, composer1);</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Object</span>&gt;</span> initialParams <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">HashMap&lt;&gt;</span>();
+initialParams<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>employeeName<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>John Doe<span class="pl-pds">"</span></span>);</pre></div>
 
 <h5>
+<a id="create-a-list-of-tasks-to-be-performed--" class="anchor" href="#create-a-list-of-tasks-to-be-performed--" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a list of <code>Task</code>s to be performed -</h5>
+
+<h6>
+<a id="task-1---fetching-employeeid-from-employeename" class="anchor" href="#task-1---fetching-employeeid-from-employeename" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 1 - Fetching <code>employeeID</code> from <code>employeeName</code>
+</h6>
+
+<div class="highlight highlight-java"><pre><span class="pl-smi">Expression</span> expression1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultExpression</span>(<span class="pl-s"><span class="pl-pds">"</span>{{$employeeName}}<span class="pl-pds">"</span></span>);
+<span class="pl-smi">Composer</span> composer1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultComposer</span>(expression1, <span class="pl-c1">true</span>);
+<span class="pl-smi">Task</span> employeeIDTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultTask</span>(<span class="pl-smi">EmployeeIdentificationService</span><span class="pl-k">.</span>class, composer1);</pre></div>
+
+<h6>
 <a id="task-2---fetching-joiningdate-from-employeename" class="anchor" href="#task-2---fetching-joiningdate-from-employeename" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 2 - Fetching <code>joiningDate</code> from <code>employeeName</code>
-</h5>
+</h6>
 
 <div class="highlight highlight-java"><pre><span class="pl-c">// Short notation for creating expression on the fly</span>
-<span class="pl-stj">Composer</span> composer2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultComposer</span>(<span class="pl-s1"><span class="pl-pds">"</span>{{$employeeName}}<span class="pl-pds">"</span></span>);
-<span class="pl-stj">Task</span> joiningDateTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultTask</span>(<span class="pl-stj">EmployeeInfoService</span><span class="pl-k">.</span>class, composer2);</pre></div>
+<span class="pl-smi">Composer</span> composer2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultComposer</span>(<span class="pl-s"><span class="pl-pds">"</span>{{$employeeName}}<span class="pl-pds">"</span></span>);
+<span class="pl-smi">Task</span> joiningDateTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultTask</span>(<span class="pl-smi">EmployeeInfoService</span><span class="pl-k">.</span>class, composer2);</pre></div>
 
-<h5>
+<h6>
 <a id="task-3---fetching-department-from-employeeid" class="anchor" href="#task-3---fetching-department-from-employeeid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 3 - Fetching <code>department</code> from <code>employeeID</code>
-</h5>
+</h6>
 
 <div class="highlight highlight-java"><pre><span class="pl-c">// Short notation for creating composer on the fly</span>
-<span class="pl-stj">Task</span> departmentTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultTask</span>(<span class="pl-stj">EmployeeDepartmentService</span><span class="pl-k">.</span>class, <span class="pl-s1"><span class="pl-pds">"</span>{{$employeeID}}<span class="pl-pds">"</span></span>);</pre></div>
+<span class="pl-smi">Task</span> departmentTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultTask</span>(<span class="pl-smi">EmployeeDepartmentService</span><span class="pl-k">.</span>class, <span class="pl-s"><span class="pl-pds">"</span>{{$employeeID}}<span class="pl-pds">"</span></span>);</pre></div>
 
-<h5>
+<h6>
 <a id="task-4---fetching-salary-from-employeeid" class="anchor" href="#task-4---fetching-salary-from-employeeid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 4 - Fetching <code>salary</code> from <code>employeeID</code>
-</h5>
+</h6>
 
-<div class="highlight highlight-java"><pre><span class="pl-stj">Task</span> salaryTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultTask</span>(<span class="pl-stj">EmployeeSalaryService</span><span class="pl-k">.</span>class, <span class="pl-s1"><span class="pl-pds">"</span>{{$employeeID}}<span class="pl-pds">"</span></span>);</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-smi">Task</span> salaryTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultTask</span>(<span class="pl-smi">EmployeeSalaryService</span><span class="pl-k">.</span>class, <span class="pl-s"><span class="pl-pds">"</span>{{$employeeID}}<span class="pl-pds">"</span></span>);</pre></div>
+
+<h6>
+<a id="task-5---fetching-location-from-employeename" class="anchor" href="#task-5---fetching-location-from-employeename" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 5 - Fetching <code>location</code> from <code>employeeName</code>
+</h6>
+
+<div class="highlight highlight-java"><pre><span class="pl-smi">Task</span> locationTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultTask</span>(<span class="pl-smi">EmployeeLocationService</span><span class="pl-k">.</span>class, <span class="pl-s"><span class="pl-pds">"</span>{{$employeeName}}<span class="pl-pds">"</span></span>);</pre></div>
+
+<h6>
+<a id="task-6---fetching-latlng-for-all-components-of-location" class="anchor" href="#task-6---fetching-latlng-for-all-components-of-location" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 6 - Fetching <code>latlng</code> for all components of <code>location</code>
+</h6>
+
+<div class="highlight highlight-java"><pre><span class="pl-c">// MultiTask for executing callable once for each value of the provided looping composer</span>
+<span class="pl-c">// Composer can use $__key and $__value while iterating</span>
+<span class="pl-c">// We also need to provide a ExecutorService to MultiTask</span>
+<span class="pl-smi">Task</span> latLngTask <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultMultiTask</span>(executor, <span class="pl-smi">LatLngService</span><span class="pl-k">.</span>class, <span class="pl-s"><span class="pl-pds">"</span>{{$location}}<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>{{$__value}}<span class="pl-pds">"</span></span>);</pre></div>
 
 <p>Finally collecting all <code>Task</code>s in a <code>Map</code></p>
 
-<div class="highlight highlight-java"><pre><span class="pl-st">Map&lt;<span class="pl-stj">String</span>, <span class="pl-stj">Task</span>&gt;</span> tasks <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-st">HashMap&lt;&gt;</span>();
-tasks<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>joiningDate<span class="pl-pds">"</span></span>, joiningDateTask);
-tasks<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>salary<span class="pl-pds">"</span></span>, salaryTask);
-tasks<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>department<span class="pl-pds">"</span></span>, departmentTask);
-tasks<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>employeeID<span class="pl-pds">"</span></span>, employeeIDTask);</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Task</span>&gt;</span> tasks <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">HashMap&lt;&gt;</span>();
+tasks<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>joiningDate<span class="pl-pds">"</span></span>, joiningDateTask);
+tasks<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>salary<span class="pl-pds">"</span></span>, salaryTask);
+tasks<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>department<span class="pl-pds">"</span></span>, departmentTask);
+tasks<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>employeeID<span class="pl-pds">"</span></span>, employeeIDTask);
+tasks<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>location<span class="pl-pds">"</span></span>, locationTask);
+tasks<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>latlng<span class="pl-pds">"</span></span>, latLngTask);</pre></div>
 
-<ol>
-<li>Create the response curator</li>
-</ol>
+<h5>
+<a id="create-the-response-curator" class="anchor" href="#create-the-response-curator" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create the response curator</h5>
 
-<div class="highlight highlight-java"><pre><span class="pl-st">Map&lt;<span class="pl-stj">String</span>, <span class="pl-stj">Object</span>&gt;</span> responseContext <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-st">HashMap&lt;&gt;</span>();
-responseContext<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>employeeName<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>{{$employeeName}}<span class="pl-pds">"</span></span>);
-responseContext<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>employeeID<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>{{$employeeID}}<span class="pl-pds">"</span></span>);
-responseContext<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>department<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>{{$department}}<span class="pl-pds">"</span></span>);
-responseContext<span class="pl-k">.</span>put(<span class="pl-s1"><span class="pl-pds">"</span>salary<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>{{#$salary}}<span class="pl-pds">"</span></span>); <span class="pl-c">// Optional data - will not fail on null value</span></pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">Object</span>&gt;</span> responseContext <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">HashMap&lt;&gt;</span>();
+responseContext<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>employeeName<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>{{$employeeName}}<span class="pl-pds">"</span></span>);
+responseContext<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>employeeID<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>{{$employeeID}}<span class="pl-pds">"</span></span>);
+responseContext<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>department<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>{{$department}}<span class="pl-pds">"</span></span>);
+responseContext<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>salary<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>{{#$salary}}<span class="pl-pds">"</span></span>); <span class="pl-c">// Optional data - will not fail on null value</span>
+responseContext<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>city<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>{{$location.city}}<span class="pl-pds">"</span></span>); <span class="pl-c">// Using expressions to extract part of data</span>
+responseContext<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>address<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>{{$(join, $(values, $location))}}<span class="pl-pds">"</span></span>); <span class="pl-c">// Using provided data access functions</span>
+responseContext<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>latlng<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>{{$latlng}}<span class="pl-pds">"</span></span>);</pre></div>
 
 <div class="highlight highlight-java"><pre><span class="pl-c">// This recursively iterates over the responseContext and parses any expression that it finds.</span>
-<span class="pl-stj">Composer</span> response <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultComposer</span>(responseContext);</pre></div>
+<span class="pl-smi">Composer</span> response <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultComposer</span>(responseContext);</pre></div>
 
-<ol>
-<li>Dispatch</li>
-</ol>
+<h5>
+<a id="create-a-executorservice" class="anchor" href="#create-a-executorservice" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a ExecutorService</h5>
 
-<div class="highlight highlight-java"><pre><span class="pl-stj">Dispatcher</span> dispatcher <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">DefaultDispatcher</span>();
-<span class="pl-stj">Object</span> output <span class="pl-k">=</span> dispatcher<span class="pl-k">.</span>execute(initialParams, tasks, response);</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">ExecutorService</span> executor <span class="pl-k">=</span> <span class="pl-smi">Executors</span><span class="pl-k">.</span>newCachedThreadPool();</pre></div>
+
+<h5>
+<a id="dispatch" class="anchor" href="#dispatch" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dispatch</h5>
+
+<div class="highlight highlight-java"><pre><span class="pl-c">// Passing Optional Parameter (ExecutorService) so we can use the same for MultiTask</span>
+<span class="pl-smi">Dispatcher</span> dispatcher <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">DefaultDispatcher</span>(executor);
+<span class="pl-smi">Object</span> output <span class="pl-k">=</span> dispatcher<span class="pl-k">.</span>execute(initialParams, tasks, response);</pre></div>
 
 <blockquote>
 <p>Code for this example can be seen <a href="https://github.com/flipkart-incubator/hydra/blob/master/hydra-examples/src/main/java/com/flipkart/hydra/example/employee/EmployeeExample.java">here</a>.</p>
@@ -307,13 +325,16 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/flipkart-incubator">flipkart-incubator</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/flipkart-incubator/hydra">Hydra</a> is maintained by <a href="https://github.com/flipkart-incubator">flipkart-incubator</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
+
+    </section>
+
+  
   </body>
 </html>
+
