@@ -29,8 +29,8 @@ import java.util.concurrent.ExecutorService;
 
 public class DefaultMultiTask extends DefaultTask {
 
-    private final Composer loopComposer;
-    private final ExecutorService executor;
+    protected final Composer loopComposer;
+    protected final ExecutorService executor;
 
     public DefaultMultiTask(ExecutorService executor, Class<? extends Callable> callableClass, Object loopOverContext, Object context) throws ComposerInstantiationException {
         this(executor, callableClass, context, loopOverContext, false);
