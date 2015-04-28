@@ -26,13 +26,11 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
 public class WrapperCallable implements Callable<Object> {
@@ -76,7 +74,7 @@ public class WrapperCallable implements Callable<Object> {
         throw new BadCallableException("Loop Variable is not iterable");
     }
 
-    protected Object getResponsesForMap() throws InvocationTargetException, InstantiationException, ComposerEvaluationException, IllegalAccessException, ExecutionException, InterruptedException {
+    protected Object getResponsesForMap() throws Exception {
         Map iterable = (Map) loopVar;
 
         Map<Object, ListenableFuture<Object>> futureMap = new HashMap<>();
@@ -96,7 +94,7 @@ public class WrapperCallable implements Callable<Object> {
         return responsesMap;
     }
 
-    protected Object getResponsesForList() throws InvocationTargetException, InstantiationException, ComposerEvaluationException, IllegalAccessException, ExecutionException, InterruptedException {
+    protected Object getResponsesForList() throws Exception {
         List list = (List) loopVar;
 
         Map<Integer, ListenableFuture<Object>> futureMap = new HashMap<>();
@@ -116,7 +114,7 @@ public class WrapperCallable implements Callable<Object> {
         return responsesList;
     }
 
-    protected Object getResponsesForArray() throws InvocationTargetException, InstantiationException, ComposerEvaluationException, IllegalAccessException, ExecutionException, InterruptedException {
+    protected Object getResponsesForArray() throws Exception {
         Object[] arr = (Object[]) loopVar;
 
         Map<Integer, ListenableFuture<Object>> futureMap = new HashMap<>();
@@ -136,7 +134,7 @@ public class WrapperCallable implements Callable<Object> {
         return responsesArray;
     }
 
-    protected ListenableFuture<Object> getFuture(Object key, Object value) throws InstantiationException, IllegalAccessException, InvocationTargetException, ComposerEvaluationException {
+    protected ListenableFuture<Object> getFuture(Object key, Object value) throws Exception {
         Map<String, Object> request = new HashMap<>(values);
         request.put("__key", key);
         request.put("__value", value);
