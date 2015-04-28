@@ -1,14 +1,7 @@
-### v1.1.4
-+ Changed access level of members of WrapperCallable to protected
-
-### v1.1.3
-+ Changed access level of methods of WrapperCallable to protected
-
-### v1.1.2
-+ Added another constructor to WrapperCallable for more flexibility
-
-### v1.1.1
+### v1.2
 + Made executor and loopComposer (in DefaultMultiTask) protected for subclasses to use
++ Added another constructor to WrapperCallable for more flexibility
++ Updated WrapperCallable to make it more inheritance friendly
 
 ### v1.1
 + Fix to support arrays while evaluating DefaultExpression
