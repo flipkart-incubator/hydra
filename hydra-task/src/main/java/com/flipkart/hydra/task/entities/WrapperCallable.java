@@ -37,11 +37,11 @@ import java.util.concurrent.ExecutorService;
 
 public class WrapperCallable implements Callable<Object> {
 
-    private final ListeningExecutorService executorService;
-    private final Constructor<? extends Callable> constructor;
-    private final Object loopVar;
-    private final Composer composer;
-    private final Map<String, Object> values;
+    protected final ListeningExecutorService executorService;
+    protected final Constructor<? extends Callable> constructor;
+    protected final Object loopVar;
+    protected final Composer composer;
+    protected final Map<String, Object> values;
 
     public WrapperCallable(ExecutorService executor, Class<? extends Callable> callableClass, Composer loopComposer, Composer composer, Map<String, Object> values) throws NoSuchMethodException, ComposerEvaluationException {
         this(MoreExecutors.listeningDecorator(executor),
