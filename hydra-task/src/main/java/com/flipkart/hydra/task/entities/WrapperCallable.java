@@ -44,9 +44,17 @@ public class WrapperCallable implements Callable<Object> {
     private final Map<String, Object> values;
 
     public WrapperCallable(ExecutorService executor, Class<? extends Callable> callableClass, Composer loopComposer, Composer composer, Map<String, Object> values) throws NoSuchMethodException, ComposerEvaluationException {
-        this.executorService = MoreExecutors.listeningDecorator(executor);
-        this.constructor = ReflectionHelper.getFirstSingleArgConstructor(callableClass);
-        this.loopVar = loopComposer.compose(values);
+        this(MoreExecutors.listeningDecorator(executor),
+                ReflectionHelper.getFirstSingleArgConstructor(callableClass),
+                loopComposer.compose(values),
+                composer,
+                values);
+    }
+
+    public WrapperCallable(ListeningExecutorService executorService, Constructor<? extends Callable> constructor, Object loopVar, Composer composer, Map<String, Object> values) {
+        this.executorService = executorService;
+        this.constructor = constructor;
+        this.loopVar = loopVar;
         this.composer = composer;
         this.values = values;
     }
