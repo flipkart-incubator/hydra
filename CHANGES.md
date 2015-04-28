@@ -1,3 +1,6 @@
+### v1.1.1
++ Made executor and loopComposer (in DefaultMultiTask) protected for subclasses to use
+
 ### v1.1
 + Fix to support arrays while evaluating DefaultExpression
 + Fixed Copyright Comment Style
