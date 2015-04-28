@@ -10,7 +10,7 @@
 
     <groupId>com.flipkart.hydra</groupId>
     <artifactId>hydra</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 
     <packaging>pom</packaging>
 

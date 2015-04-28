@@ -1,3 +1,6 @@
+### v1.1.2
++ Added another constructor to WrapperCallable for more flexibility
+
 ### v1.1.1
 + Made executor and loopComposer (in DefaultMultiTask) protected for subclasses to use
 
