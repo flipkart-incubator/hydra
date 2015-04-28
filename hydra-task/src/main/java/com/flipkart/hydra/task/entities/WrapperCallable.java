@@ -76,7 +76,7 @@ public class WrapperCallable implements Callable<Object> {
         throw new BadCallableException("Loop Variable is not iterable");
     }
 
-    private Object getResponsesForMap() throws InvocationTargetException, InstantiationException, ComposerEvaluationException, IllegalAccessException, ExecutionException, InterruptedException {
+    protected Object getResponsesForMap() throws InvocationTargetException, InstantiationException, ComposerEvaluationException, IllegalAccessException, ExecutionException, InterruptedException {
         Map iterable = (Map) loopVar;
 
         Map<Object, ListenableFuture<Object>> futureMap = new HashMap<>();
@@ -96,7 +96,7 @@ public class WrapperCallable implements Callable<Object> {
         return responsesMap;
     }
 
-    private Object getResponsesForList() throws InvocationTargetException, InstantiationException, ComposerEvaluationException, IllegalAccessException, ExecutionException, InterruptedException {
+    protected Object getResponsesForList() throws InvocationTargetException, InstantiationException, ComposerEvaluationException, IllegalAccessException, ExecutionException, InterruptedException {
         List list = (List) loopVar;
 
         Map<Integer, ListenableFuture<Object>> futureMap = new HashMap<>();
@@ -116,7 +116,7 @@ public class WrapperCallable implements Callable<Object> {
         return responsesList;
     }
 
-    private Object getResponsesForArray() throws InvocationTargetException, InstantiationException, ComposerEvaluationException, IllegalAccessException, ExecutionException, InterruptedException {
+    protected Object getResponsesForArray() throws InvocationTargetException, InstantiationException, ComposerEvaluationException, IllegalAccessException, ExecutionException, InterruptedException {
         Object[] arr = (Object[]) loopVar;
 
         Map<Integer, ListenableFuture<Object>> futureMap = new HashMap<>();
@@ -136,7 +136,7 @@ public class WrapperCallable implements Callable<Object> {
         return responsesArray;
     }
 
-    private ListenableFuture<Object> getFuture(Object key, Object value) throws InstantiationException, IllegalAccessException, InvocationTargetException, ComposerEvaluationException {
+    protected ListenableFuture<Object> getFuture(Object key, Object value) throws InstantiationException, IllegalAccessException, InvocationTargetException, ComposerEvaluationException {
         Map<String, Object> request = new HashMap<>(values);
         request.put("__key", key);
         request.put("__value", value);
