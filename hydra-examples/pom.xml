@@ -8,12 +8,12 @@
     <description>Examples</description>
 
     <artifactId>hydra-examples</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
 
     <parent>
         <groupId>com.flipkart.hydra</groupId>
         <artifactId>hydra</artifactId>
-        <version>1.1.3</version>
+        <version>1.1.4</version>
     </parent>
 
     <dependencies>

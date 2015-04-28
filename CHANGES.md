@@ -1,3 +1,6 @@
+### v1.1.4
++ Changed access level of members of WrapperCallable to protected
+
 ### v1.1.3
 + Changed access level of methods of WrapperCallable to protected
 
