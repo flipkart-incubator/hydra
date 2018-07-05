@@ -1,3 +1,6 @@
+### v1.3
++ Bug fix in WrapperCallable (loopover) for lists and arrays
+
 ### v1.2
 + Made executor and loopComposer (in DefaultMultiTask) protected for subclasses to use
 + Added another constructor to WrapperCallable for more flexibility
