@@ -108,7 +108,7 @@ public class WrapperCallable implements Callable<Object> {
 
         List<Object> responsesList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            responsesList.add(futureMap.get(i));
+            responsesList.add(futureMap.get(i).get());
         }
 
         return responsesList;
@@ -128,7 +128,7 @@ public class WrapperCallable implements Callable<Object> {
 
         Object[] responsesArray = new Object[arr.length];
         for (int i = 0; i < arr.length; i++) {
-            responsesArray[i] = futureMap.get(i);
+            responsesArray[i] = futureMap.get(i).get();
         }
 
         return responsesArray;
